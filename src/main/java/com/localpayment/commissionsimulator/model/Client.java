@@ -6,5 +6,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Client {
-	private String idClient;
+	private String clientAccount;
+	private String amount;
+	private String transactionType;
 }

@@ -8,7 +8,7 @@ import com.localpayment.commissionsimulator.service.ClientService;
 import com.localpayment.commissionsimulator.util.Util;
 
 @Service
-public class ClientServiceImpl implements ClientService{
+public class ClientServiceImpl implements ClientService {
 
 	@Override
 	public ClientCommission calculateCommission(Client data) {

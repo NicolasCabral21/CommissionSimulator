@@ -17,10 +17,4 @@ public class Util {
 	    
 	    return localTax[numero];
 	}
-	
-	public static void main(String[] args) {
-
-	    System.out.println(generatorFee());
-	    System.out.println(generatorLocalTax());
-	}
 }
