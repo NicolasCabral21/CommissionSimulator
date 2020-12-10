@@ -18,7 +18,7 @@ public class ProviderController {
 	private ProviderService providerService;
 
 	@PostMapping("/calculate-commission")
-	public ProviderCommission calculateCommissionProvider(@RequestBody Provider data) {
+	public ProviderCommission calculateCommission(@RequestBody Provider data) {
 		return providerService.calculateCommission(data);
 	}
 }

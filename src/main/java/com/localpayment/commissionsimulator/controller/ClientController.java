@@ -18,7 +18,7 @@ public class ClientController {
 	private ClientService clientService;
 
 	@PostMapping("/calculate-commission")
-	public ClientCommission calculateCommissionClient(@RequestBody Client data) {
+	public ClientCommission calculateCommission(@RequestBody Client data) {
 		return clientService.calculateCommission(data);
 	}
 }
