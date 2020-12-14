@@ -10,11 +10,19 @@ public class Util {
 	    return fee[numero];
 	}
 	
-	public static String generatorLocalTax() {
+	public static String generatorLocaltax() {
 	    String[] localTax = {"1.0","1.1","1.2","1.3","1.4"};
 	    
 	    int numero = (int) (Math.random()* (4 - 0) + 0);
 	    
 	    return localTax[numero];
+	}
+	
+	public static String generatorWitholding() {
+	    String[] witholding = {"1.0","1.1","1.2","1.3","1.4"};
+	    
+	    int numero = (int) (Math.random()* (4 - 0) + 0);
+	    
+	    return witholding[numero];
 	}
 }
