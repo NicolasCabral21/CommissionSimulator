@@ -1,28 +1,35 @@
 package com.localpayment.commissionsimulator.util;
 
+import java.util.concurrent.ThreadLocalRandom;
+
+import org.springframework.stereotype.Component;
+
+@Component
 public class Util {
 	
-	public static String generatorFee() {
-		String[] fee = {"2.0","2.1","2.2","2.3","2.4"};
+	public static Double generatorFee() {
+		Double[] fee = {0.02, 0.021, 0.022, 0.023, 0.024};
 	    
-	    int numero = (int) (Math.random()* (4 - 0) + 0);
-	    
-	    return fee[numero];
+	    return fee[returnRandomNumber(fee)];
 	}
 	
-	public static String generatorLocaltax() {
-	    String[] localTax = {"1.0","1.1","1.2","1.3","1.4"};
+	public static Double generatorLocaltax() {
+		Double[] localTax = {0.01, 0.011, 0.012, 0.013, 0.014};
 	    
-	    int numero = (int) (Math.random()* (4 - 0) + 0);
-	    
-	    return localTax[numero];
+	    return localTax[returnRandomNumber(localTax)];
 	}
 	
-	public static String generatorWitholding() {
-	    String[] witholding = {"1.0","1.1","1.2","1.3","1.4"};
+	public static Double generatorWitholding() {
+		Double[] withholding = {0.01, 0.011, 0.012, 0.013, 0.014};
 	    
-	    int numero = (int) (Math.random()* (4 - 0) + 0);
-	    
-	    return witholding[numero];
+	    return withholding[returnRandomNumber(withholding)];
+	}
+	
+	private static int returnRandomNumber(Double[] array) {
+		return ThreadLocalRandom.current().nextInt(0, array.length - 1);
+	}
+	
+	private Util() {
+		
 	}
 }

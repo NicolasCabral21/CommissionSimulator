@@ -7,7 +7,8 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class Fee {
-	private Double percentage;
+public class Entity {
+	private String providerAccount;
 	private BigDecimal amount;
+	private String transactionType;
 }
