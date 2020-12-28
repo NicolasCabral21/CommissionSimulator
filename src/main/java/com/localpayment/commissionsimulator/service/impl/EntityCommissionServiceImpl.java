@@ -4,69 +4,82 @@ import java.math.BigDecimal;
 
 import org.springframework.stereotype.Service;
 
+import com.localpayment.commissionsimulator.model.ClientCommission;
 import com.localpayment.commissionsimulator.model.Commission;
 import com.localpayment.commissionsimulator.model.Entity;
 import com.localpayment.commissionsimulator.model.Fee;
 import com.localpayment.commissionsimulator.model.Localtax;
+import com.localpayment.commissionsimulator.model.Provider;
 import com.localpayment.commissionsimulator.model.ProviderCommission;
 import com.localpayment.commissionsimulator.model.Withholding;
 import com.localpayment.commissionsimulator.service.EntityCommissionService;
-import com.localpayment.commissionsimulator.util.Util;
 
 @Service
 public class EntityCommissionServiceImpl implements EntityCommissionService {
 
 	@Override
 	public Commission calculate(Entity data) {
+		Commission commission;
 		
-		ProviderCommission providerCommission = new ProviderCommission();
+		if (data instanceof Provider) {
+			commission = new ProviderCommission();
+		} else {
+			commission = new ClientCommission();
+		}
 		
-		Fee[] fees = calculateFees(data);
+		Fee fee = calculateFee(data);
+		Localtax localtax = calculateLocalTax(data);
+		Withholding witholding = calculateWithholding(data);
 		
-		Localtax[] localtaxes = calculateLocalTaxes(data);
+		commission.setFee(new Fee[] { fee });
+		commission.setLocaltax(new Localtax[] { localtax });
+		commission.setWitholding(new Withholding[] {witholding});
 		
-		Withholding[] witholdings = calculateWithholdings(data);
-		
-		providerCommission.setFees(fees);
-		providerCommission.setLocaltaxes(localtaxes);
-		providerCommission.setWitholdings(witholdings);
-		
-		return providerCommission;
+		return commission;
 	}
 	
-	private Fee[] calculateFees(Entity data) {
+	private Fee calculateFee(Entity data) {
 		Fee fee1 = new Fee();
-		fee1.setPercentage(Util.generatorFee());
+		fee1.setPercentage(getPercentageByEntityAccount(data.getAccount()));
 		fee1.setAmount(data.getAmount().multiply(BigDecimal.valueOf(fee1.getPercentage())));
 		
-		Fee fee2 = new Fee();
-		fee2.setPercentage(Util.generatorFee());
-		fee2.setAmount(data.getAmount().multiply(BigDecimal.valueOf(fee2.getPercentage())));
-		
-		return new Fee[] { fee1, fee2 };
+		return fee1;
 	}
 	
-	private Localtax[] calculateLocalTaxes(Entity data) {
+	private Localtax calculateLocalTax(Entity data) {
 		Localtax localtax1 = new Localtax();
-		localtax1.setPercentage(Util.generatorLocaltax());
+		localtax1.setPercentage(getPercentageByEntityAccount(data.getAccount()));
 		localtax1.setAmount(data.getAmount().multiply(BigDecimal.valueOf(localtax1.getPercentage())));
 		
-		Localtax localtax2 = new Localtax();
-		localtax2.setPercentage(Util.generatorLocaltax());
-		localtax2.setAmount(data.getAmount().multiply(BigDecimal.valueOf(localtax2.getPercentage())));
-		
-		return new Localtax[] { localtax1, localtax2 };
+		return localtax1;
 	}
 	
-	private Withholding[] calculateWithholdings(Entity data) {
+	private Withholding calculateWithholding(Entity data) {
 		Withholding witholding1 = new Withholding();
-		witholding1.setPercentage(Util.generatorWitholding());
+		witholding1.setPercentage(getPercentageByEntityAccount(data.getAccount()));
 		witholding1.setAmount(data.getAmount().multiply(BigDecimal.valueOf(witholding1.getPercentage())));
 		
-		Withholding witholding2 = new Withholding();
-		witholding2.setPercentage(Util.generatorWitholding());
-		witholding2.setAmount(data.getAmount().multiply(BigDecimal.valueOf(witholding2.getPercentage())));
-		
-		return new Withholding[] { witholding1 , witholding2 };
+		return witholding1;
+	}
+	
+	private Double getPercentageByEntityAccount(String account) {
+		Double percentage = null;
+		switch (account) {
+		case "PAYOARGARS01":
+			percentage = 0.02;
+			break;
+		case "PAYOARGUSD01":
+			percentage = 0.01;
+			break;
+		case "THUNCHLUSD01":
+			percentage = 0.03;
+			break;
+		case "032.840.000001":
+			percentage = 0.025;
+			break;
+		default:
+			percentage = 0.05;
+		}
+		return percentage;
 	}
 }
