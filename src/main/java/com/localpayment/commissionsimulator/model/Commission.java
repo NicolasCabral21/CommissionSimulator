@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public abstract class Commission {
-	private Fee[] fee;
-	private Localtax[] localtax;
-	private Withholding[] witholding;
+	private Fee fee;
+	private Localtax localtax;
+	private Withholding withholding;
 }

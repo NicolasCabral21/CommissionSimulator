@@ -31,9 +31,13 @@ public class EntityCommissionServiceImpl implements EntityCommissionService {
 		Localtax localtax = calculateLocalTax(data);
 		Withholding witholding = calculateWithholding(data);
 		
-		commission.setFee(new Fee[] { fee });
-		commission.setLocaltax(new Localtax[] { localtax });
-		commission.setWitholding(new Withholding[] {witholding});
+//		commission.setFee(new Fee[] { fee });
+//		commission.setLocaltax(new Localtax[] { localtax });
+//		commission.setWitholding(new Withholding[] {witholding});
+		
+		commission.setFee(fee);
+		commission.setLocaltax(localtax);
+		commission.setWithholding(witholding);
 		
 		return commission;
 	}
