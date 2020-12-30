@@ -7,18 +7,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.localpayment.commissionsimulator.model.Commission;
-import com.localpayment.commissionsimulator.model.Provider;
+import com.localpayment.commissionsimulator.model.Entity;
 import com.localpayment.commissionsimulator.service.EntityCommissionService;
 
 @RestController
-@RequestMapping("/provider")
-public class ProviderController {
-	
-	@Autowired
-	private EntityCommissionService providerService;
+@RequestMapping("/entity")
+public class EntityController {
 
-	@PostMapping("/calculate-commission")
-	public Commission calculateCommission(@RequestBody Provider data) {
-		return providerService.calculate(data);
+	@Autowired
+	private EntityCommissionService clientService;
+
+	@PostMapping("/calculate")
+	public Commission calculateCommission(@RequestBody Entity data) {
+		return clientService.calculate(data);
 	}
 }

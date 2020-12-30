@@ -9,81 +9,61 @@ import com.localpayment.commissionsimulator.model.Commission;
 import com.localpayment.commissionsimulator.model.Entity;
 import com.localpayment.commissionsimulator.model.Fee;
 import com.localpayment.commissionsimulator.model.Localtax;
-import com.localpayment.commissionsimulator.model.Provider;
 import com.localpayment.commissionsimulator.model.ProviderCommission;
 import com.localpayment.commissionsimulator.model.Withholding;
 import com.localpayment.commissionsimulator.service.EntityCommissionService;
 
 @Service
 public class EntityCommissionServiceImpl implements EntityCommissionService {
-
+	
 	@Override
 	public Commission calculate(Entity data) {
-		Commission commission;
-		
-		if (data instanceof Provider) {
-			commission = new ProviderCommission();
+		if (data.getType().equalsIgnoreCase("P")) {
+			return buildProviderCommission(data);
 		} else {
-			commission = new ClientCommission();
+			return buildClientCommission(data);
 		}
+	}
+	
+	private Commission buildProviderCommission(Entity data) {
+		Commission commission = new ProviderCommission();
 		
-		Fee fee = calculateFee(data);
-		Localtax localtax = calculateLocalTax(data);
-		Withholding witholding = calculateWithholding(data);
-		
-//		commission.setFee(new Fee[] { fee });
-//		commission.setLocaltax(new Localtax[] { localtax });
-//		commission.setWitholding(new Withholding[] {witholding});
-		
-		commission.setFee(fee);
-		commission.setLocaltax(localtax);
-		commission.setWithholding(witholding);
+		switch (data.getAccount()) {
+		case "032.840.000001":	// Bco. Galicia
+			commission.setFee(new Fee(0.01, data.getAmount().multiply(BigDecimal.valueOf(0.01))));
+			commission.setLocaltax(new Localtax(0.012, data.getAmount().multiply(BigDecimal.valueOf(0.012))));
+			commission.setWithholding(new Withholding(0.001, data.getAmount().multiply(BigDecimal.valueOf(0.001))));
+			break;
+		case "182-5058/7":		// Bco. Francés
+			commission.setFee(new Fee(0.03, data.getAmount().multiply(BigDecimal.valueOf(0.03))));
+			commission.setLocaltax(new Localtax(0.06, data.getAmount().multiply(BigDecimal.valueOf(0.06))));
+			commission.setWithholding(new Withholding(0.002, data.getAmount().multiply(BigDecimal.valueOf(0.002))));
+			break;
+		default:
+			
+		}
 		
 		return commission;
 	}
 	
-	private Fee calculateFee(Entity data) {
-		Fee fee1 = new Fee();
-		fee1.setPercentage(getPercentageByEntityAccount(data.getAccount()));
-		fee1.setAmount(data.getAmount().multiply(BigDecimal.valueOf(fee1.getPercentage())));
+	private Commission buildClientCommission(Entity data) {
+		Commission commission = new ClientCommission();
 		
-		return fee1;
-	}
-	
-	private Localtax calculateLocalTax(Entity data) {
-		Localtax localtax1 = new Localtax();
-		localtax1.setPercentage(getPercentageByEntityAccount(data.getAccount()));
-		localtax1.setAmount(data.getAmount().multiply(BigDecimal.valueOf(localtax1.getPercentage())));
-		
-		return localtax1;
-	}
-	
-	private Withholding calculateWithholding(Entity data) {
-		Withholding witholding1 = new Withholding();
-		witholding1.setPercentage(getPercentageByEntityAccount(data.getAccount()));
-		witholding1.setAmount(data.getAmount().multiply(BigDecimal.valueOf(witholding1.getPercentage())));
-		
-		return witholding1;
-	}
-	
-	private Double getPercentageByEntityAccount(String account) {
-		Double percentage = null;
-		switch (account) {
+		switch (data.getAccount()) {
 		case "PAYOARGARS01":
-			percentage = 0.02;
+			commission.setFee(new Fee(0.01, data.getAmount().multiply(BigDecimal.valueOf(0.01))));
+			commission.setLocaltax(new Localtax(0.04, data.getAmount().multiply(BigDecimal.valueOf(0.04))));
+			commission.setWithholding(new Withholding(0.003, data.getAmount().multiply(BigDecimal.valueOf(0.003))));
 			break;
 		case "PAYOARGUSD01":
-			percentage = 0.01;
-			break;
-		case "THUNCHLUSD01":
-			percentage = 0.03;
-			break;
-		case "032.840.000001":
-			percentage = 0.025;
+			commission.setFee(new Fee(0.02, data.getAmount().multiply(BigDecimal.valueOf(0.02))));
+			commission.setLocaltax(new Localtax(0.012, data.getAmount().multiply(BigDecimal.valueOf(0.012))));
+			commission.setWithholding(new Withholding(0.002, data.getAmount().multiply(BigDecimal.valueOf(0.002))));
 			break;
 		default:
-			percentage = 0.05;
+			
 		}
-		return percentage;
+		
+		return commission;
 	}
 }

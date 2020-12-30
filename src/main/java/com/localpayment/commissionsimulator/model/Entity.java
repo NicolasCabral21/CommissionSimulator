@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 public class Entity {
+	private String type;
 	private String account;
 	private BigDecimal amount;
 	private String transactionType;

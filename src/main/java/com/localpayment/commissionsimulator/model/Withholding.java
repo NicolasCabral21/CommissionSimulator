@@ -2,12 +2,9 @@ package com.localpayment.commissionsimulator.model;
 
 import java.math.BigDecimal;
 
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public class Withholding extends Discount {
 
-@Data
-@NoArgsConstructor
-public class Withholding {
-	private Double percentage;
-	private BigDecimal amount;
+	public Withholding(Double percentage, BigDecimal amount) {
+		super(percentage, amount);
+	}
 }
