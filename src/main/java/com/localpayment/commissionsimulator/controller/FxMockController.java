@@ -20,11 +20,12 @@ public class FxMockController {
 	@PostConstruct
 	private void initialize() {
 		prices.put(218, BigDecimal.valueOf(4.23));
-		prices.put(267, BigDecimal.valueOf(84.04));
+		prices.put(267, BigDecimal.valueOf(140.0));
 		prices.put(270, BigDecimal.valueOf(1.99));
 		prices.put(287, BigDecimal.valueOf(0.12));
 		prices.put(288, BigDecimal.valueOf(0.024));
 		prices.put(299, BigDecimal.valueOf(16.13));
+		prices.put(305, BigDecimal.ONE);
 	}
 	
 	@GetMapping("/price")
