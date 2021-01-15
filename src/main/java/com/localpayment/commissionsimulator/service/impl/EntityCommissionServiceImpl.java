@@ -15,7 +15,7 @@ import com.localpayment.commissionsimulator.service.EntityCommissionService;
 
 @Service
 public class EntityCommissionServiceImpl implements EntityCommissionService {
-	
+
 	@Override
 	public Commission calculate(Entity data) {
 		if (data.getType().equalsIgnoreCase("P")) {
@@ -24,54 +24,56 @@ public class EntityCommissionServiceImpl implements EntityCommissionService {
 			return buildClientCommission(data);
 		}
 	}
-	
+
 	private Commission buildProviderCommission(Entity data) {
 		Commission commission = new ProviderCommission();
-		
+
 		switch (data.getAccount()) {
-		case "032.840.000001":	// Bco. Galicia
+		// case "032.840.000001": 	// Bco. Galicia
+		case 1:
 			commission.setFee(new Fee(0.01, data.getAmount().multiply(BigDecimal.valueOf(0.01))));
-			//commission.setFee(new Fee(0.02, data.getAmount().multiply(BigDecimal.valueOf(0.02))));
 			commission.setLocaltax(new Localtax(0.012, data.getAmount().multiply(BigDecimal.valueOf(0.012))));
 			commission.setWithholding(new Withholding(0.001, data.getAmount().multiply(BigDecimal.valueOf(0.001))));
 			break;
-		case "182-5058/7":		// Bco. Francés
+		// case "182-5058/7": 		// Bco. Francés
+		case 2:
 			commission.setFee(new Fee(0.03, data.getAmount().multiply(BigDecimal.valueOf(0.03))));
 			commission.setLocaltax(new Localtax(0.06, data.getAmount().multiply(BigDecimal.valueOf(0.06))));
 			commission.setWithholding(new Withholding(0.002, data.getAmount().multiply(BigDecimal.valueOf(0.002))));
 			break;
 		default:
-			
+
 		}
-		
+
 		return commission;
 	}
-	
+
 	private Commission buildClientCommission(Entity data) {
 		Commission commission = new ClientCommission();
-		
+
 		switch (data.getAccount()) {
-		case "PAYOARGARS01":
+		// case "THUNCHLUSD01":
+		case 3:
+			commission.setFee(new Fee(0.02, data.getAmount().multiply(BigDecimal.valueOf(0.02))));
+			commission.setLocaltax(new Localtax(0.012, data.getAmount().multiply(BigDecimal.valueOf(0.012))));
+			commission.setWithholding(new Withholding(0.002, data.getAmount().multiply(BigDecimal.valueOf(0.002))));
+			break;
+		// case "PAYOARGUSD01":
+		case 4:
+			commission.setFee(new Fee(0.03, data.getAmount().multiply(BigDecimal.valueOf(0.03))));
+			commission.setLocaltax(new Localtax(0.014, data.getAmount().multiply(BigDecimal.valueOf(0.014))));
+			commission.setWithholding(new Withholding(0.005, data.getAmount().multiply(BigDecimal.valueOf(0.005))));
+			break;
+		// case "PAYOARGARS01":
+		case 6:
 			commission.setFee(new Fee(0.01, data.getAmount().multiply(BigDecimal.valueOf(0.01))));
 			commission.setLocaltax(new Localtax(0.04, data.getAmount().multiply(BigDecimal.valueOf(0.04))));
 			commission.setWithholding(new Withholding(0.003, data.getAmount().multiply(BigDecimal.valueOf(0.003))));
 			break;
-		case "PAYOARGUSD01":
-			commission.setFee(new Fee(0.02, data.getAmount().multiply(BigDecimal.valueOf(0.02))));
-			//commission.setFee(new Fee(0.01, data.getAmount().multiply(BigDecimal.valueOf(0.01))));
-			commission.setLocaltax(new Localtax(0.012, data.getAmount().multiply(BigDecimal.valueOf(0.012))));
-			commission.setWithholding(new Withholding(0.002, data.getAmount().multiply(BigDecimal.valueOf(0.002))));
-			break;
-		case "THUNCHLUSD01":
-			commission.setFee(new Fee(0.02, data.getAmount().multiply(BigDecimal.valueOf(0.02))));
-			//commission.setFee(new Fee(0.01, data.getAmount().multiply(BigDecimal.valueOf(0.01))));
-			commission.setLocaltax(new Localtax(0.012, data.getAmount().multiply(BigDecimal.valueOf(0.012))));
-			commission.setWithholding(new Withholding(0.002, data.getAmount().multiply(BigDecimal.valueOf(0.002))));
-			break;
 		default:
-			
+
 		}
-		
+
 		return commission;
 	}
 }

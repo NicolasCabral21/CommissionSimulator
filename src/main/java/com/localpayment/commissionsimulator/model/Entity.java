@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Entity {
 	private String type;
-	private String account;
+	private int account;
 	private BigDecimal amount;
 	private String transactionType;
 }
